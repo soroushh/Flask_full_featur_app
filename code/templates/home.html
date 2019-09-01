@@ -1,16 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    {% if title %}
-        <title>Flask_blog_{{ title }}</title>
-    {% else %}
-        <title>Flaks_blog</title>
-    {% endif %}
-
-</head>
-
-<body>
- {% for person in people %}
+{% extends "layout.html" %}
+{% block content %}
+    {% for person in people %}
      {% if person.name == "soroush" %}
          <p> We have a soroush at the moment.</p>
      {% endif %}
@@ -20,9 +10,9 @@
      <h1>{{ person.family }}</h1>
      <p> Job:</p>
      <h1> Occupation: {{ person.job }}</h1>
- {% endfor %}
+    {% endfor %}
 
-</body>
+{% endblock content %}
 
-</html>
+
 
