@@ -5,9 +5,15 @@
 </head>
 
 <body>
- {% for post in posts %}
-   <h1> {{post.title}}</h1>
+ {% for person in people %}
+     <p> Name:</p>
+     <h1>{{ person.name }}</h1>
+     <p> Family:</p>
+     <h1>{{ person.family }}</h1>
+     <p> Job:</p>
+     <h1> Occupation: {{ person.job }}</h1>
  {% endfor %}
+
 </body>
 
 </html>
