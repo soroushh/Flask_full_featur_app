@@ -5,7 +5,10 @@
 </head>
 
 <body>
-<h1> This is home page.</h1>
+ {% for post in posts %}
+   <h1> {{post.title}}</h1>
+ {% endfor %}
 </body>
 
 </html>
+
