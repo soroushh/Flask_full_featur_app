@@ -2,4 +2,4 @@ flask
 flask_sqlalchemy
 datetime
 flask_wtf
-wtforms
+flask_bcrypt
