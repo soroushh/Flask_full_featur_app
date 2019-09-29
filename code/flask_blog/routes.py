@@ -4,7 +4,7 @@ from flask_blog import app
 from flask_blog import bcrypt
 from flask_blog.models import User, Post
 from flask_blog import db
-from flask_login import login_user, current_user
+from flask_login import login_user, current_user, logout_user
 posts = [
     {
         'author': 'Corey Schafer',
@@ -60,3 +60,8 @@ def login():
         else:
             flash("Login unsuceesful", 'danger')
     return render_template('login.html', title="login", form=form)
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for("home"))
