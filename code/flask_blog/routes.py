@@ -4,6 +4,7 @@ from flask_blog import app
 from flask_blog import bcrypt
 from flask_blog.models import User, Post
 from flask_blog import db
+from flask_login import login_user
 posts = [
     {
         'author': 'Corey Schafer',
@@ -35,7 +36,7 @@ def about():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data)
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         user = User(username=form.username.data, email=form.email.data, password=hashed_password)
         db.session.add(user)
         db.session.commit()
@@ -50,6 +51,7 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
+            login_user(user, remember=form.remember_me.data)
             return redirect(url_for("home"))
         else:
             flash("Login unsuceesful", 'danger')
