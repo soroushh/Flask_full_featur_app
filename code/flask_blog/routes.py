@@ -4,7 +4,7 @@ from flask_blog import app
 from flask_blog import bcrypt
 from flask_blog.models import User, Post
 from flask_blog import db
-from flask_login import login_user
+from flask_login import login_user, current_user
 posts = [
     {
         'author': 'Corey Schafer',
@@ -34,6 +34,8 @@ def about():
 
 @app.route('/register', methods=["POST", "GET"])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for("home"))
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
@@ -47,6 +49,8 @@ def register():
 
 @app.route('/login', methods=["POST", "GET"])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for("home"))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
