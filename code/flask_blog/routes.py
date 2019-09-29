@@ -1,10 +1,10 @@
-from flask import render_template, url_for, flash, redirect
+from flask import render_template, url_for, flash, redirect, request
 from flask_blog.forms import LoginForm, RegistrationForm
 from flask_blog import app
 from flask_blog import bcrypt
 from flask_blog.models import User, Post
 from flask_blog import db
-from flask_login import login_user, current_user, logout_user
+from flask_login import login_user, current_user, logout_user, login_required
 posts = [
     {
         'author': 'Corey Schafer',
@@ -20,14 +20,15 @@ posts = [
     }
 ]
 
+
 @app.route("/")
 @app.route("/home")
-
 def home():
     return render_template('home.html', posts=posts)
 
 
 @app.route("/about")
+@login_required
 def about():
     return render_template('about.html', title='About')
 
@@ -56,7 +57,11 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember_me.data)
-            return redirect(url_for("home"))
+            next_page = request.args.get("next")
+            if next_page:
+                return redirect(next_page)
+            else:
+                return redirect(url_for("home"))
         else:
             flash("Login unsuceesful", 'danger')
     return render_template('login.html', title="login", form=form)
@@ -65,3 +70,10 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for("home"))
+
+
+
+@app.route("/account")
+@login_required
+def account():
+    return render_template("account.html", title='Account')
